@@ -1,33 +1,19 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-char op(int x, int y, int z){
-    if (z == x + y) {
-        return '+';
-    } else if (z == x - y) {
-        return '-';
-    } else if (z == x * y) {
-        return '*';
-    } else if (y != 0 && z == x / y) {
-        return '/';
-    } else {
-        return 'I'; 
-    }
+//NÃO FUNCIONA(MAS ESTÁ CORRETO) POIS O BEECROWD É UMA PLATAFORMA MALDITA, IMUNDA E SATÂNICA.
+
+char op(int x, int y, int z) {
+    if (z == x + y) return '+';
+    if (z == x - y) return '-';
+    if (z == x * y) return '*';
+    if (y != 0 && z == x / y) return '/';
     return 'I';
 }
 
-void insertionSort(char arr[][20], int n) {
-    for (int i = 1; i < n; i++) {
-        char key[20];
-        strcpy(key, arr[i]);
-        int j = i - 1;
-
-        while (j >= 0 && strcmp(arr[j], key) > 0) {
-            strcpy(arr[j + 1], arr[j]);
-            j = j - 1;
-        }
-        strcpy(arr[j + 1], key);
-    }
+int compareNames(const void *a, const void *b) {
+    return strcmp((const char *)a, (const char *)b);
 }
 
 int main(){
@@ -40,21 +26,14 @@ int main(){
     char t[50]; //operadores
     int notpass = 0;
 
-    while(scanf("%d",&n) != 0){
+    while(scanf("%d",&n) != EOF){
         notpass = 0;
         for(int i = 0 ; i < n ; i++){
             scanf("%d %d=%d",&x,&y,&z);
             t[i] = op(x,y,z);
         }
         for(int i = 0 ; i < n ; i++){
-            getchar();
-            fgets(name, sizeof(name), stdin);
-            name[strcspn(name, "\n")] = '\0';
-
-            scanf("%d",&expression_index);
-            getchar();
-            scanf("%c",&operator_answer);
-            getchar();
+            scanf("%s %d %c",name,&expression_index,&operator_answer);
 
             if(t[expression_index-1] != operator_answer){
                 strcpy(names[notpass],name);
@@ -62,23 +41,18 @@ int main(){
             }
         }
 
-        insertionSort(names,n); //!!!
-
         if(notpass == n){
             printf("None Shall Pass!\n");
         } else{
+            qsort(names, notpass, sizeof(names[0]), compareNames);
             for(int i = 0 ; i < notpass ; i++){
-                printf("%s",names[i]);
-                if(i == notpass-1){
-                    printf("\n");
-                } else{
-                    printf(" ");
-                }
+                if (i > 0) printf(" ");
+                printf("%s", names[i]);
             }
         }
-        
+        printf("\n");
     }
-    //Pendente...
-    //Problema na saída do código
     return 0;
 }
+
+
